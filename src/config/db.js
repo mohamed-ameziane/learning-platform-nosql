@@ -47,6 +47,7 @@ async function closeConnections() {
 module.exports = {
   connectMongo,
   connectRedis,
+  getMongoClient: () => mongoClient,
   getDb: () => db,
   getRedisClient: () => redisClient,
   closeConnections,
