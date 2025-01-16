@@ -18,16 +18,41 @@ async function connectRedis() {
 async function cacheData(key, data, ttl) {
   // TODO: Implémenter une fonction générique de cache
   try {
-    await client.set(key, JSON.stringify(data), {
-      EX: ttl
-    });
+    await connectRedis();
+    await client.set(key, JSON.stringify(data), { EX: ttl });
     console.log(`Data cached with key: ${key}`);
   } catch (error) {
     console.error('Error caching data:', error);
+    throw error;
+  }
+}
+
+async function getData(key) {
+  try {
+    await connectRedis();
+    const data = await client.get(key);
+    return data ? JSON.parse(data) : null;
+  } catch (error) {
+    console.error("Error getting cached data:", error);
+    throw error;
+  }
+}
+
+async function deleteData(key) {
+  try {
+    await connectRedis();
+    await client.del(key);
+    console.log(`Data deleted with key: ${key}`);
+  } catch (error) {
+    console.error("Error deleting cached data:", error);
+    throw error;
   }
 }
   
   module.exports = {
     // TODO: Exporter les fonctions utilitaires
-    cacheData
+    cacheData,
+    getData,
+    deleteData,
+    connectRedis,
   };
