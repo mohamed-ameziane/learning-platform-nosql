@@ -19,15 +19,24 @@ const courseRoutes = require('./routes/courseRoutes');
 
 const app = express();
 
+// Middleware to parse JSON request bodies
+app.use(express.json()); 
+
 async function startServer() {
   try {
     await connectMongo();
     await connectRedis();
     
-    app.use('/api/courses', courseRoutes);
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
     
-    app.listen(config.port, () => {
-      console.log(`Server running on port ${config.port}`);
+  
+    app.use("/api/courses", courseRoutes);
+
+    // Démarrer le serveur
+    const port = config.port;
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
@@ -37,15 +46,19 @@ async function startServer() {
 
 // Gestion propre de l'arrêt
 process.on('SIGTERM', async () => {
-  console.log('SIGTERM signal received: closing the server...');
-  try {
-    await db.disconnect(); // Fermer la connexion à MongoDB
-    console.log('Database connection closed.');
-    process.exit(0); // Arrêt propre
-  } catch (error) {
-    console.error('Error during server shutdown:', error.message);
-    process.exit(1); // Arrêt forcé
+  // TODO: Implémenter la fermeture propre des connexions
+  await db.closeConnections();
+  console.log("SIGTERM signal received: closing HTTP server");
+  // Implémenter la fermeture propre des connexions
+  if (mongoClient) {
+    await mongoClient.close();
+    console.log("MongoDB connection closed");
   }
+  if (redisClient) {
+    await redisClient.quit();
+    console.log("Redis connection closed");
+  }
+  process.exit(0);
 });
 
 startServer();
