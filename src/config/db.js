@@ -13,14 +13,14 @@ async function connectMongo() {
   // TODO: Implémenter la connexion MongoDB
   // Gérer les erreurs et les retries
   try {
-    mongoClient = new MongoClient(config.mongodb.uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    mongoClient = new MongoClient(config.mongodb.uri); // Supprimer useNewUrlParser et useUnifiedTopology
     await mongoClient.connect();
     db = mongoClient.db(config.mongodb.dbName);
-    console.log('MongoDB connecté avec succès');
+    console.log('Connected to MongoDB');
   } catch (error) {
-    console.error('Erreur lors de la connexion à MongoDB :', error);
-    throw error;
-  }
+    console.error('MongoDB connection error:', error);
+    process.exit(1);
+  } 
 }
 
 async function connectRedis() {
@@ -28,20 +28,26 @@ async function connectRedis() {
   // Gérer les erreurs et les retries
   try {
     redisClient = redis.createClient({ url: config.redis.uri });
+    redisClient.on('error', (err) => console.error('Redis error:', err));
     await redisClient.connect();
-    console.log('Redis connecté avec succès');
+    console.log('Connected to Redis');
   } catch (error) {
-    console.error('Erreur lors de la connexion à Redis :', error);
-    throw error;
+    console.error('Redis connection error:', error);
+    process.exit(1);
   }
 }
 
-// Export des fonctions et clients
+async function closeConnections() {
+  if (mongoClient) await mongoClient.close();
+  if (redisClient) await redisClient.quit();
+  console.log('Connections closed');
+}
+
+// Export the functions and clients
 module.exports = {
-  // TODO: Exporter les clients et fonctions utiles
   connectMongo,
   connectRedis,
+  getDb: () => db,
+  getRedisClient: () => redisClient,
   closeConnections,
-  getMongoDb: () => db,
-  getRedisClient: () => redisClient
 };
