@@ -86,7 +86,7 @@ Ce projet est une application de gestion de cours en ligne. Il utilise Node.js, 
    ![Create course](/images/InsertionCours.png)
 
    -> Get course by id :
-   ![Get course by id](/images/"ObtentionCours par ID".png)
+   ![Get course by id](/images/"ObtentionCours par ID.png")
 
    -> Get Stats :
    ![Get Stats](/images/ObtentionStats.png)
