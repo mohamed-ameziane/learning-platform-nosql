@@ -29,7 +29,7 @@ Ce projet est une application de gestion de cours en ligne. Il utilise Node.js, 
 ```PORT=3000```
 
 ## Structure du Projet
-
+```
 ├── src
 │   ├── config
 
@@ -62,7 +62,7 @@ Ce projet est une application de gestion de cours en ligne. Il utilise Node.js, 
 ├── [package.json]               ### Contient les dépendances et scripts du projet
 
 └── [README.md]                  ### Documentation du projet
-
+```
 ## Les Choix Techniques 
 
    "dotenv": "16.4.7"  -> Pour la gestion des variables d'environnement, permettant de stocker les configurations sensibles comme les clés API ou les mots de passe dans des fichiers `.env`, afin de sécuriser l'application.
