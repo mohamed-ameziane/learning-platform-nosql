@@ -15,7 +15,7 @@ Ce projet est une application de gestion de cours en ligne. Il utilise Node.js, 
 
 -> Cloner le dépôt par les commandes suivantes:
 
-```git clone https://github.com/KH1511/learning-platform-nosql.git```
+```git clone https://github.com/mohamed-ameziane/learning-platform-nosql.git```
 ```cd learning-platform-nosql```
 
 -> Installation des dépendances par la commande :
